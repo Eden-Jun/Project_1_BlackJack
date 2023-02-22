@@ -1,3 +1,7 @@
+// 22/02/23
+// please ignore this first
+// This is nothing but some scrambled code and myself for now. Will update on 23/02/23
+
 window.onload= function createGame(){ //this will initilize the game the moment the window opens
 buildDeck(); //build a deck
 shuffleDeck(); //shuffle the cards around
