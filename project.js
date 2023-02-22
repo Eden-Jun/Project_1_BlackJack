@@ -7,14 +7,13 @@ let playerAce = 0;
 let hidden;
 let deck;
 
+let canHit = true; //allows player to "hit" if playerSum < 21
 
-
-
-let canHit = true; 
-window.onload= function createGame(){ //this will initilize the game the moment the window opens
-    buildDeck(); //build a deck
-    shuffleDeck(); //shuffle the cards around
-    startGame(); //begin the game
+let wager = 0; // initialize the wager to 0
+window.onload= function(){
+    buildDeck();
+    shuffleDeck();
+    startGame();
 }
 
 function buildDeck(){
@@ -22,16 +21,10 @@ function buildDeck(){
     let suits = ["H","C","D","S"];
     deck = []
 
-
-
     for (let i = 0; i < suits.length; i++) {
         for (let j = 0; j < values.length; j++) {
             deck.push(values[j]+ "-" + suits[i]);
-            
-        }//create deck by first, looping through each suit, then each value. Afterwards, you join the 
-        // two arrays created into one with a seperate dash. The dash will help you seperate the suit and values out
-        // while corresponding with the card imgs
-        
+        }
     }
 }
 
@@ -39,11 +32,23 @@ function shuffleDeck(){
     deck.sort(()=>Math.random()-0.5)
     console.log(deck)
 }
-//This compares the eleent to the number of random(-.5 to +0.5) 
 
 function startGame(){
-    hidden = deck.pop(); //create the first card for the dealer
-    dealerSum += getValue(hidden); //this is the valuu
+    // get the selected wager value from the HTML
+    document.getElementById("submit-wager").addEventListener("click", function() {
+        wager = parseInt(document.getElementById("wager").value);
+        console.log("Wager:", wager);
+        // disable the wager input field and button
+        document.getElementById("wager").disabled = true;
+        document.getElementById("submit-wager").disabled = true;
+        // start the game
+        startRound();
+    });
+}
+
+function startRound(){
+    hidden = deck.pop();
+    dealerSum += getValue(hidden);
     dealerAce += checkAce(hidden);
   
     while(dealerSum<17){
@@ -80,7 +85,7 @@ function startGame(){
         playerAce += checkAce(card);
         document.getElementById("player-cards").append(cardImg);
 
-        if(maxHit(playerSum, playerAce) >=21){
+        if(maxHit(playerSum, playerAce) >21){
             canHit = false;
         }
 
@@ -88,34 +93,35 @@ function startGame(){
     
 }
 
-function stay(){
-    dealerSum = maxHit(dealerSum,dealerAce); //You call this function to show that the maximum number of hits has occured,
-    playerSum = maxHit(playerSum,playerAce); //Therefore, since the return of playerSum is calculated in the maxHit()
+function stay() {
+  dealerSum = maxHit(dealerSum, dealerAce);
+  playerSum = maxHit(playerSum, playerAce);
 
-    canHit = false;                          //Revert canHit to false to that the function cannot be called 
-    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
-    let message = "";
-   
-    if(playerSum>21){
-        message = "You Lose";
-    }
-    else if(dealerSum>21){
-        message = "You Win";
-    }
-    else if(playerSum>dealerSum){
-        message = "You Win";
-    }
-    else if(playerSum<dealerSum){
-        message = "You Lose";
-    }
-document.getElementById("result").innerText = message;
-document.getElementById("player-sum").innerText = playerSum;
-document.getElementById("dealer-sum").innerText = dealerSum;
+  canHit = false;
+  document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+  let message = "";
 
-
+  if (playerSum > 21) {
+    message = "You Lose";
+    wager -= wager;
+  } else if (dealerSum > 21) {
+    message = "You Win";
+    wager += wager;
+  } else if (playerSum > dealerSum) {
+    message = "You Win";
+    wager += wager;
+  } else if (playerSum < dealerSum) {
+    message = "You Lose";
+    wager -= wager;
+  } else {
+    message = "Draw";
+  }
+  document.getElementById("result").innerText = message;
+  document.getElementById("player-sum").innerText = playerSum;
+  document.getElementById("dealer-sum").innerText = dealerSum;
+  document.getElementById("player-value").innerText = "You now have:" + wager;
 }
 
-//Add your functions to calculate the values of the hand 
 
 function getValue(card){
     let numericalValue = card.split("-");
@@ -123,23 +129,24 @@ function getValue(card){
 
     if(isNaN(actualValue)){
         if(actualValue==="A"){
-            return 11 //If it's an ace, the return is 11 FOR NOW
+            return 11
         }
-        return 10 //otherwise, it is a K,J,Q and only has a value of 10
+        return 10
     }
     return parseInt(actualValue);
 }
+
 function checkAce(card){
-    if(card[0] === "Ace"){
+    if(card[0] === "A"){
         return 1
     }
     return 0
 }
 
 function maxHit(playerSum, playerAce){
-    if(playerSum>21 && playerAce>0){
-        playerSum -= 10 
-        playerAce -= 1 
+    while(playerSum>21 && playerAce>0){
+        playerSum -= 10
+        playerAce -= 1
     }
     return playerSum
 }

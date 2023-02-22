@@ -5,15 +5,15 @@ body {
 }
 
 #dealer-cards img {
-    height: 175px;
-    width: 125px;
+    height: 150px;
+    width: 100px;
     margin: 1px;
 
 }
 
 #player-cards img {
-    height: 175px;
-    width: 125px;
+    height: 150px;
+    width: 100px;
     margin: 1px;
 
 }
@@ -33,6 +33,6 @@ body {
 
 
 #result{
-    font-size: 70px;
+    font-size: 25px;
     font: bold;
 }
