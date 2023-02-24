@@ -10,7 +10,8 @@ let deck;
 let canHit = true; //allows player to "hit" if playerSum < 21
 
 let wager = 0; // initialize the wager to 0
-window.onload= function(){
+let bank = 200
+window.onload= function createGame(){
     buildDeck();
     shuffleDeck();
     startGame();
@@ -37,8 +38,9 @@ function startGame(){
     // get the selected wager value from the HTML
     document.getElementById("submit-wager").addEventListener("click", function() {
         wager = parseInt(document.getElementById("wager").value);
-        console.log("Wager:", wager);
         // disable the wager input field and button
+        console.log(bank-wager)
+        document.getElementById("bank-value").innerHTML = bank-wager
         document.getElementById("wager").disabled = true;
         document.getElementById("submit-wager").disabled = true;
         // start the game
@@ -103,23 +105,26 @@ function stay() {
 
   if (playerSum > 21) {
     message = "You Lose";
-    wager -= wager;
+    bank -=wager
   } else if (dealerSum > 21) {
     message = "You Win";
-    wager += wager;
+    bank += wager;
   } else if (playerSum > dealerSum) {
     message = "You Win";
-    wager += wager;
+    bank += wager;
   } else if (playerSum < dealerSum) {
     message = "You Lose";
-    wager -= wager;
+    bank -= wager;
   } else {
     message = "Draw";
   }
   document.getElementById("result").innerText = message;
   document.getElementById("player-sum").innerText = playerSum;
   document.getElementById("dealer-sum").innerText = dealerSum;
-  document.getElementById("player-value").innerText = "You now have:" + wager;
+  document.getElementById("player-value").innerText = "You now have:" + bank;
+  document.getElementById("bank-value").innerHTML = bank
+
+
 }
 
 
