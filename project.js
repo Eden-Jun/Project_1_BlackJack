@@ -1,5 +1,6 @@
 let dealerSum = 0;
 let playerSum = 0 ;
+console.log("BRUH")
 
 let dealerAce = 0;
 let playerAce = 0;
@@ -10,7 +11,7 @@ let deck;
 let canHit = true; //allows player to "hit" if playerSum < 21
 
 let wager = 0; // initialize the wager to 0
-let bank = 200
+let bank = 100
 let hidden;
 
 window.onload= function createGame(){
@@ -20,7 +21,7 @@ window.onload= function createGame(){
 }
 
 function buildDeck(){
-    let values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+    let values = ["A","9","10","J","Q","K"];
     let suits = ["H","C","D","S"];
     deck = []
 

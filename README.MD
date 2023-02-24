@@ -14,6 +14,7 @@
 
 # This was solved with the following functions:
 
+```
 function getValue(card){
 let numericalValue = card.split("-");
 let actualValue = numericalValue[0];
@@ -27,14 +28,18 @@ let actualValue = numericalValue[0];
     return parseInt(actualValue);
 
 }
+```
 
+```
 function checkAce(card){
 if(card[0] === "A"){
 return 1
 }
 return 0
 }
+```
 
+```
 function maxHit(playerSum, playerAce){
 while(playerSum>21 && playerAce>0){
 playerSum -= 10
@@ -42,13 +47,14 @@ playerAce -= 1
 }
 return playerSum
 }
+```
 
-# Firstly, the getValue() function removes any number from the array an checks if they are J,Q,K or A.
+### Firstly, the getValue() function removes any number from the array an checks if they are J,Q,K or A.
 
-# J,Q,K have a constant value of 10, while an ace with 2 cards dealt usually reverts to 11
+### J,Q,K have a constant value of 10, while an ace with 2 cards dealt usually reverts to 11
 
-# function maxHit() also calculate the value of the hand and dynamic value of the ace by:
+### function maxHit() also calculate the value of the hand and dynamic value of the ace by:
 
-# in the hand, an ace must be present (>0 is at leasr 1) and the value must be over 11
+### in the hand, an ace must be present (>0 is at leasr 1) and the value must be over 11
 
-# Since ace not becomes one, the playerSum can subtract 10 such that the value is now a +1 instead of +11
+### Since ace not becomes one, the playerSum can subtract 10 such that the value is now a +1 instead of +11
