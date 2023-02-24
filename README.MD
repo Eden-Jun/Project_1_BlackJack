@@ -1,113 +1,28 @@
-Update, 24/02/2022
-This is a simple game of Blackjack. A player gets to submit a wager before every round and that bank value is subtracted
-by the wager value after every round. The dealer will begin with a card face-down at the start var hidden.
-At the end of the round the values of player and dealer cards are calculated and compared.
-There is no split, surrender or pairs/triples/5cardsunder21 conditions for this version of the game
+# Update, 24/02/2022
 
-let canHit = true; //allows player to "hit" if playerSum < 21
+## This is a simple game of Blackjack. A player gets to submit a wager before every round and that bank value is subtracted by the wager value after every round. The dealer will begin with a card face-down at the start var hidden. At the end of the round the values of player and dealer cards are calculated and compared. There is no split, surrender or pairs/triples/5cardsunder21 conditions for this version of the game
 
-let wager = 0; // initialize the wager to 0
-let bank = 200
-window.onload= function createGame(){
-buildDeck();
-shuffleDeck();
-startGame();
-}
+## The rules are simple, the dealer will draw as many cards at the start of each round till the dealer's value is at least 17
 
-//this function builds a deck by iterating through each array and joining them together to form a set of cards
-// for ex: A-H,2-C. This dash is important so that later, we can seperate the string out to only look
-// at each card[0], which is either a numerical figure or alphabet
-function buildDeck(){
-let values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
-let suits = ["H","C","D","S"];
-deck = []
+## The player is free to hit as many cards as possible as long as the player does not exceed 21.
 
-    for (let i = 0; i < suits.length; i++) {
-        for (let j = 0; j < values.length; j++) {
-            deck.push(values[j]+ "-" + suits[i]);
-        }
-    }
+# Note that the bank and wager carry over has not been fully implemented yet
 
-}
+# Challenges:
 
-function shuffleDeck(){
-deck.sort(()=>Math.random()-0.5)
-console.log(deck)
-}
-//this sort allows us to truly randomize the array of cards. As Math.random() will produce a random number
-//between 0-1, the -0.5 will give a result in the range of -0.5 to +0.5
+# The biggest challenge was to calulcate the dynamic value of the Ace, being 1 or 11
 
-function startGame(){
-// get the selected wager value from the HTML
-document.getElementById("submit-wager").addEventListener("click", function() {
-wager = parseInt(document.getElementById("wager").value);
-// disable the wager input field and button
-document.getElementById("bank-value").innerHTML = bank-wager
-document.getElementById("wager").disabled = true;
-document.getElementById("submit-wager").disabled = true;
-// start the game
-startRound();
-});
-}
-
-function startRound(){
-hidden = deck.pop(); //let the hidden card take on the first element of the shuffled deck
-dealerSum += getValue(hidden);
-dealerAce += checkAce(hidden);
-
-    while(dealerSum<17){ //If dealer has less than 17, draw an additional card. since 1 card has a max of 11, at least 2 drawn
-        let cardImg = document.createElement("img");
-        let card = deck.pop()
-        cardImg.src = "./cards/" + card + ".png"
-        dealerSum += getValue(card);
-        dealerAce += checkAce(card);
-        document.getElementById("dealer-cards").append(cardImg);
-        console.log(card)
-    }
-    console.log(dealerSum)
-
-    for (let k = 0; k < 2; k++) { //start by giving the player 2 cards, so i<2
-        let cardImg = document.createElement("img");
-        let card = deck.pop()
-        cardImg.src = "./cards/" + card + ".png" //draw from the img folder
-        playerSum += getValue(card);
-        playerAce += checkAce(card);
-        document.getElementById("player-cards").append(cardImg);
-        console.log(card)
-
-    }
-    console.log(playerSum)
-    document.getElementById("hit").addEventListener("click", hit);
-    document.getElementById("stay").addEventListener("click", stay)
-
-    function hit(){
-        if (!canHit){ //if hit is false(initialized to be true), return
-            return
-        }
-        let cardImg = document.createElement("img");
-        let card = deck.pop()
-        cardImg.src = "./cards/" + card + ".png"
-        playerSum += getValue(card);
-        playerAce += checkAce(card);
-        document.getElementById("player-cards").append(cardImg); //else, pop the first card from the deck
-
-        if(maxHit(playerSum, playerAce) >21){
-            canHit = false;
-        }
-
-    }
-
-}
+# This was solved with the following functions:
 
 function getValue(card){
 let numericalValue = card.split("-");
 let actualValue = numericalValue[0];
 
-    if(isNaN(actualValue)){  //If not a number so = A,J,Q,K
-        if(actualValue==="A"){ //Is an Ace
+    if(isNaN(actualValue)){
+        if(actualValue==="A"){
             return 11
         }
-        return 10 //J,Q,K is 10
+        return 10
     }
     return parseInt(actualValue);
 
@@ -120,10 +35,20 @@ return 1
 return 0
 }
 
-function maxHit(playerSum, playerAce){ //since ace can either be 1 or 11, subtracting 10 will allow the sum to revert
-while(playerSum>21 && playerAce>0){ // back to +1 (11-10)
+function maxHit(playerSum, playerAce){
+while(playerSum>21 && playerAce>0){
 playerSum -= 10
-playerAce -= 1 //minus the ace count so as to not repeat the function infinitely
+playerAce -= 1
 }
 return playerSum
 }
+
+# Firstly, the getValue() function removes any number from the array an checks if they are J,Q,K or A.
+
+# J,Q,K have a constant value of 10, while an ace with 2 cards dealt usually reverts to 11
+
+# function maxHit() also calculate the value of the hand and dynamic value of the ace by:
+
+# in the hand, an ace must be present (>0 is at leasr 1) and the value must be over 11
+
+# Since ace not becomes one, the playerSum can subtract 10 such that the value is now a +1 instead of +11

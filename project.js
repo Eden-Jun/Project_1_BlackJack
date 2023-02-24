@@ -4,13 +4,15 @@ let playerSum = 0 ;
 let dealerAce = 0;
 let playerAce = 0;
 
-let hidden;
+
 let deck;
 
 let canHit = true; //allows player to "hit" if playerSum < 21
 
 let wager = 0; // initialize the wager to 0
 let bank = 200
+let hidden;
+
 window.onload= function createGame(){
     buildDeck();
     shuffleDeck();
@@ -124,6 +126,35 @@ function stay() {
   document.getElementById("player-value").innerText = "You now have:" + bank;
   document.getElementById("bank-value").innerHTML = bank
 
+// if (bank > 0) {
+//   // Reset dealer and player sum and ace count
+  
+  
+//   document.getElementById("dealer-cards").innerHTML = "";
+//   document.getElementById("player-cards").innerHTML = "";
+  
+//   deck.push(hidden);
+//   for (let i = 0; i < document.getElementById("dealer-cards").childElementCount; i++) {
+//     let cardSrc = document.getElementById("dealer-cards").children[i].src.split("/");
+//     let card = cardSrc[cardSrc.length - 1].slice(0, -4);
+//     deck.push(card);
+//   }
+//   for (let i = 0; i < document.getElementById("player-cards").childElementCount; i++) {
+//     let cardSrc = document.getElementById("player-cards").children[i].src.split("/");
+//     let card = cardSrc[cardSrc.length - 1].slice(0, -4);
+//     deck.push(card);
+// }
+
+
+//   document.getElementById("wager").disabled = false;
+//   document.getElementById("submit-wager").disabled = false;
+//   dealerSum = 0;
+//   playerSum = 0;
+//   dealerAce = 0;
+//   playerAce = 0;
+// } else {
+//   document.getElementById("result").innerText = "Bro please, stop.";
+// }
 
 }
 
