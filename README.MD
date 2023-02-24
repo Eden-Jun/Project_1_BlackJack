@@ -1,17 +1,8 @@
 Update, 24/02/2022
-//This is a simple game of Blackjack. A player gets to submit a wager before every round and that bank value is subtracted
-// by the wager value after every round. The dealer will begin with a card face-down at the start var hidden.
-//At the end of the round the values of player and dealer cards are calculated and compared.
-//There is no split, surrender or pairs/triples/5cardsunder21 conditions for this version of the game
-
-let dealerSum = 0;
-let playerSum = 0 ;
-
-let dealerAce = 0;
-let playerAce = 0;
-
-let hidden;
-let deck;
+This is a simple game of Blackjack. A player gets to submit a wager before every round and that bank value is subtracted
+by the wager value after every round. The dealer will begin with a card face-down at the start var hidden.
+At the end of the round the values of player and dealer cards are calculated and compared.
+There is no split, surrender or pairs/triples/5cardsunder21 conditions for this version of the game
 
 let canHit = true; //allows player to "hit" if playerSum < 21
 
@@ -22,6 +13,7 @@ buildDeck();
 shuffleDeck();
 startGame();
 }
+
 //this function builds a deck by iterating through each array and joining them together to form a set of cards
 // for ex: A-H,2-C. This dash is important so that later, we can seperate the string out to only look
 // at each card[0], which is either a numerical figure or alphabet
@@ -104,37 +96,6 @@ dealerAce += checkAce(hidden);
         }
 
     }
-
-}
-
-function stay() {
-dealerSum = maxHit(dealerSum, dealerAce); //this function gives the value of hand
-playerSum = maxHit(playerSum, playerAce);
-
-canHit = false;
-document.getElementById("hidden").src = "./cards/" + hidden + ".png";
-let message = "";
-
-if (playerSum > 21) {
-message = "You Lose";
-bank -=wager
-} else if (dealerSum > 21) {
-message = "You Win";
-bank += wager;
-} else if (playerSum > dealerSum) {
-message = "You Win";
-bank += wager;
-} else if (playerSum < dealerSum) {
-message = "You Lose";
-bank -= wager;
-} else {
-message = "Draw";
-}
-document.getElementById("result").innerText = message;
-document.getElementById("player-sum").innerText = playerSum;
-document.getElementById("dealer-sum").innerText = dealerSum;
-document.getElementById("player-value").innerText = "You now have:" + bank;
-document.getElementById("bank-value").innerHTML = bank
 
 }
 
